@@ -1,35 +1,19 @@
 <template>
   <div class="main-container">
-    <div class="grid-spaceAround" id="row1">
-      <div class="col-2 row1">
-        <p><span class="tickets">{{ mockData.supportTickets }}</span></p>
-        <h3>Support tickets</h3>
-      </div>
-    
-      <div class="col-2 row1">
-        <p><span class="hours">{{ mockData.reportedHours }}</span> / <span class="weekly">{{ mockData.weeklyHours }}</span></p>
-        <h3>Timmar</h3>
-      </div>
-    
-      <div class="col-3 row1">
-        <p><span>(Diagram)</span></p>
-        <h3>Svarstid support</h3>
-      </div>
-      <div class="col-2 row1">
-        <p><span>{{ mockData.randomData }}</span></p>
-        <h3>Data</h3>
-    </div>
-    </div>
+    <Row1 :mockData="mockData"></Row1>
   </div>
 </template>
 
 <script>
 
 import mockData from '../../mockdata.json'
-
+import Row1 from './Row1'
 
 export default {
   name: 'Row',
+  components: {
+    'Row1': Row1
+  },
   mockData: mockData,
   data () {
     return {
@@ -41,12 +25,6 @@ export default {
   },
   created: function(){
     console.log(mockData)
-   
-   /*   fetch('http://localhost/westart/mockdata.json',{mode: "no-cors"} )
-    .then(response => response.json())
-    .then((response) => {
-      console.log(response)
-    }) */
   } 
 }
 </script>

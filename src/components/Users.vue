@@ -2,20 +2,27 @@
   <div class="hello">
     <h2>Users</h2>
     <ul>
-      <li v-for="user in users">Name:{{user.name}} Email: {{user.email}} 
+      <li v-for="(user, i) in users" v-bind:key="i">Name:{{user.name}} Email: {{user.email}} 
         Phone: {{user.phone}}</li>
       
     </ul>
-    <input type="text" v-model="newUser.name"/>
-    <input type="text" v-model="newUser.email"/>
-    <button v-on:click="addUser">Add user</button>
+   <!--  <input type="text" v-model="newUser.name"/>
+    <input type="text" v-model="newUser.email"/> -->
+    <InputField v-if="show" :msg="message" @messageChanged="message = $event"></InputField>
+    <p v-else>Else</p>
+    <button v-on:click="show = !show">Add user</button>
  
   </div>
 </template>
 
 <script>
 
+import InputField from './Input'
+
 export default {
+  components: {
+    'InputField': InputField
+  },
   name: 'users',
   data () {
     return {
@@ -24,18 +31,14 @@ export default {
         email: "julia@gmail.com",
         phone: "0008888"
       },
-      users: []
+      users: [],
+      message: "This is a great message!",
+      show: true
     }
   },
   methods: {
-    addUser: function(){
-      console.log(this.newUser)
-      this.users.push({
-        name: this.newUser.name,
-        email: this.newUser.email,
-        phone: this.newUser.phone
-
-      })
+    hide: function(){
+      this.show = false
     }
   },
   created: function(){
