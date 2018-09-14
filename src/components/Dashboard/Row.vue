@@ -1,6 +1,15 @@
 <template>
   <div class="main-container">
+    
+    <div class="grid">
+      <div class="col-12 panel panel-info">
+        <div class="panel-heading">
+        Support tickets Table
+        </div>
+      </div>
+    </div>
     <Row1 :mockData="mockData"></Row1>
+
   </div>
 </template>
 
@@ -38,10 +47,9 @@ div.main-container{
 }
 
 h3{
-  font-size: 1em;
+  font-size: 1.2em;
   padding: 0.6em 0em 0.4em 0em;
   margin: 0px auto;
-  border-top: 1px solid #dce3ef;
   color: rgb(97, 95, 95);
 }
 
@@ -50,35 +58,51 @@ p{
   margin: 0.5em 0em;
 }
 
+[class*=col-], [class*=col_], [class~=col]{
+  padding: 0;
+}
+
 div.row1{
   background-color: #FFF;
   text-align: center;
-  box-shadow: 0 8px 6px -6px rgb(73, 73, 73);
-  border-radius: 2px;
+ 
   margin-top: 2em;
-}
-
-div.col-3{
-  height: 130px;  
-}
-
-div.col-2{
-  height: 130px;
-}
-
-div.grid-spaceAround [class*=col-], [class*=col_], [class~=col]{
-  padding: 0.5rem 0rem; 
-}
-
-div.graph-container{
-  height: 250px;
 }
 
 .hours{
   color: indianred;
-}
+} 
 
 .tickets{
   color: rgb(57, 97, 134);
+}
+
+div.graph{
+  height: 300px;
+}
+
+.panel-heading{
+  border-radius: 0;
+}
+
+.dashboard-wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+
+.diagram-wrapper{
+  flex-basis: 50%;
+}
+.diagram-wrapper .panel{
+  height: 100%;
+}
+.four-wrap{
+  flex-basis: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+div.row1{
+  flex-basis: 44%;
 }
 </style>

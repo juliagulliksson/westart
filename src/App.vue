@@ -18,6 +18,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
 body{
-  background-color: #dce3ef;
+  background-color: #f7f9fc;
 }
 </style>
