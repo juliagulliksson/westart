@@ -4,11 +4,16 @@
     <div class="grid">
       <div class="col-12 panel panel-info">
         <div class="panel-heading">
-        Support tickets Table
+        <h3>Support tickets</h3>
+        </div>
+        <div class="panel-body">
+          <SupportTicketsTable :supportTickets="supportTickets"></SupportTicketsTable>
         </div>
       </div>
     </div>
-    <Row1 :mockData="mockData"></Row1>
+    <Row1 :mockData="mockData" 
+    :nrOfSupportTickets="nrOfSupportTickets"></Row1>
+    
 
   </div>
 </template>
@@ -17,40 +22,70 @@
 
 import mockData from '../../mockdata.json'
 import Row1 from './Row1'
+import SupportTicketsTable from './SupportTicketsTable';
+import Key from '../../key.json';
 
 export default {
   name: 'Row',
   components: {
-    'Row1': Row1
+    'Row1': Row1,
+    'SupportTicketsTable': SupportTicketsTable
   },
-  mockData: mockData,
+  
   data () {
     return {
-        mockData: mockData
+        mockData: mockData,
+        supportTickets: [],
+        nrOfSupportTickets: "",
+        key: Key.key
     }
   },
   methods: {
+    setSupportTickets(tickets){
+        tickets = tickets.issues;
+        const highPriority = tickets.filter(response => response.priority.name === "Hög")
+        this.supportTickets = highPriority
+        this.nrOfSupportTickets = tickets.length
+    }
     
   },
   created: function(){
-    console.log(mockData)
+     fetch(`http://redmine.westart.se/issues.json?key=${this.key}&limit=100`)
+      .then(response => response.json())
+      .then((response) => {
+        this.setSupportTickets(response)
+      })
   } 
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+
+table tr:nth-child(even){
+  background-color: #d9edf7;
+}
+
+table td{
+  padding: 10px;
+  border: 1px solid #bce8f1;
+}
+
+table th{
+  padding: 10px;
+}
   
 div.main-container{
   width: 80%;
   margin: 0px auto;
 }
 
-h3{
+.panel-heading h3{
   font-size: 1.2em;
   padding: 0.6em 0em 0.4em 0em;
   margin: 0px auto;
-  color: rgb(97, 95, 95);
+  color: #31708f;
+  font-weight: 700;
 }
 
 p{
@@ -65,8 +100,8 @@ p{
 div.row1{
   background-color: #FFF;
   text-align: center;
- 
-  margin-top: 2em;
+ /* 
+  margin-top: 2em; */
 }
 
 .hours{
@@ -104,5 +139,9 @@ div.graph{
 }
 div.row1{
   flex-basis: 44%;
+}
+
+.no-margin{
+  margin: 0;
 }
 </style>

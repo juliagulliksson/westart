@@ -3,7 +3,13 @@
 
     <h1>Schema</h1>
 
-    <Table :mockSchema="mockSchema"></Table>
+   <!--  <Table :mockSchema="mockSchema"></Table> -->
+   <template v-for="cm in mockSchema">
+    <div v-for="names in cm" :key="names.id">
+      {{names.name}}
+    </div>
+   </template>
+   
   </div>
 
 </template>
@@ -17,7 +23,8 @@ export default {
   name: "Schema",
   data(){
     return {
-      mockSchema: mockSchema
+      mockSchema: mockSchema.map(mockSchema => mockSchema.cm),
+     /*   cm: mockSchema.map(mockSchema => mockSchema.name) */
     }
   },
   components: {
@@ -31,6 +38,35 @@ export default {
 </script>
 
 <style>
+
+
+.table{
+  text-align: center;
+    width: 60%; 
+  margin: 0px auto;
+}
+
+table td{
+  padding: 10px 30px;
+  border: 1px solid black;
+}
+
+.th-days th{
+  border-top: 1px solid black;
+ 
+}
+
+.th-dates th, .th-days th{
+  padding: 5px 30px;
+  border-left:1px solid black;
+  border-right: 1px solid black;
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #31708f;
+  text-align: center;
+}
+
+
 /* th{
    padding: 0em 3em;
 } */

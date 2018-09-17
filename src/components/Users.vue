@@ -1,23 +1,24 @@
 <template>
   <div class="hello">
-    <h2>Users</h2>
+<!--     <h2>Users</h2>
     <ul>
       <li v-for="(user, i) in users" v-bind:key="i">Name:{{user.name}} Email: {{user.email}} 
         Phone: {{user.phone}}</li>
       
     </ul>
-   <!--  <input type="text" v-model="newUser.name"/>
-    <input type="text" v-model="newUser.email"/> -->
+ 
     <InputField v-if="show" :msg="message" @messageChanged="message = $event"></InputField>
     <p v-else>Else</p>
-    <button v-on:click="show = !show">Add user</button>
+    <button v-on:click="show = !show">Add user</button> -->
  
+ <div v-for="(user, i) in users" v-bind:key="i">{{user.age}} {{user.name}}</div>
   </div>
 </template>
 
 <script>
 
 import InputField from './Input'
+import Users from '../test.json'
 
 export default {
   components: {
@@ -26,14 +27,15 @@ export default {
   name: 'users',
   data () {
     return {
-      newUser:  {
+      /* newUser:  {
         name: "Julia",
         email: "julia@gmail.com",
         phone: "0008888"
       },
       users: [],
       message: "This is a great message!",
-      show: true
+      show: true */
+      users: Users.filter(User => User.age === 21)
     }
   },
   methods: {
@@ -44,12 +46,8 @@ export default {
   created: function(){
     console.log("created")
    
-     fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    .then((response) => {
-      console.log(response)
-      this.users = response;
-    })
+    
+
   } 
 }
 </script>
