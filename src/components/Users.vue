@@ -1,30 +1,11 @@
 <template>
- 
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  </ol>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img class="d-block w-100" src="" alt="First slide">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="" alt="Second slide">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="" alt="Third slide">
-    </div>
-  </div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
+<div>
+<div>
+  {{array1}}
+</div>
+<div>
+  {{array2}}
+</div>
 </div>
 
 </template>
@@ -41,15 +22,8 @@ export default {
   name: 'users',
   data () {
     return {
-      /* newUser:  {
-        name: "Julia",
-        email: "julia@gmail.com",
-        phone: "0008888"
-      },
-      users: [],
-      message: "This is a great message!",
-      show: true */
-      users: Users.filter(User => User.age === 21)
+      array1: [],
+      array2: []
     }
   },
   methods: {
@@ -58,7 +32,17 @@ export default {
     }
   },
   created: function(){
-    console.log("created")
+    let array = [1, 2, 3, 4, 5, 6, 7, 8 ,9 ,10, 11, 12, 13, 14];
+
+    if(array.length > 10){
+      
+     /*  console.log(array.slice(10))
+      console.log(array.splice(0,10))  */
+      
+      /* this.array2 = array.slice(10); */ 
+      this.array1 = array.splice(0,10);
+      console.log(array)
+    }
    
     
 

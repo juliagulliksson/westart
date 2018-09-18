@@ -1,46 +1,53 @@
 <template>
-  <table>
-    <tr>
-        <th>#</th>
-        <th>Status</th>
-        <th>Priority</th>
-        <th>Subject</th>
-        <th>Due date</th>
-        <th>Assignee</th>
-        <th>Created</th> 
-        <th>Updated</th>
-    </tr>
-    <template v-for="supportTicket in supportTickets">
-      <tr :key="supportTicket.id" :class="{immediate: supportTicket.priority.name === 'Omedelbar'}">
-      <td >
-        {{supportTicket.id}}
-      </td>
-        <td>
-        {{supportTicket.status.name}}
-      </td>
-      <td :class="{red: supportTicket.priority.name === 'Omedelbar'}">
-        {{supportTicket.priority.name}}
-      </td>
-      <td>
-        {{supportTicket.subject.slice(0,50)}}<span v-if="supportTicket.subject.length > 50">...</span>
-      </td>
-      <td>
-        {{supportTicket.due_date}}
-      </td>
-      <td v-if="supportTicket.assigned_to != undefined">
-        {{supportTicket.assigned_to.name}}
-      </td>
-      <td v-else>Unknown</td>
-      <td>
-        {{supportTicket.created_on.slice(0, 16).replace("T", " ")}}
-      </td> 
-      <td>
-        {{supportTicket.updated_on.slice(0, 16).replace("T", " ")}}
-      </td>
-      </tr>
-    </template>
-  </table>
-
+  <div class="support-tickets panel panel-info">
+    <div class="panel-heading">
+    <h3>Support tickets</h3>
+    </div>
+    <div class="panel-body">
+      <table>
+        <tr>
+            <th>#</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Subject</th>
+            <th>Assignee</th>
+            <th>Due date</th>
+            <th>Created</th> 
+            <th>Updated</th>
+        </tr>
+        <template v-for="supportTicket in supportTickets">
+          <tr :key="supportTicket.id" :class="{immediate: supportTicket.priority.name === 'Omedelbar'}">
+          <td >
+            {{supportTicket.id}}
+          </td>
+            <td>
+            {{supportTicket.status.name}}
+          </td>
+          <td :class="{red: supportTicket.priority.name === 'Omedelbar'}">
+            {{supportTicket.priority.name}}
+          </td>
+          <td>
+            {{supportTicket.subject.slice(0,50)}}<span v-if="supportTicket.subject.length > 50">...</span>
+          </td>
+          <td v-if="supportTicket.assigned_to != undefined">
+            {{supportTicket.assigned_to.name}}
+          </td>
+          <td v-else>Unknown</td>
+          <td>
+            {{supportTicket.due_date}}
+          </td>
+          
+          <td>
+            {{supportTicket.created_on.slice(0, 16).replace("T", " ")}}
+          </td> 
+          <td>
+            {{supportTicket.updated_on.slice(0, 16).replace("T", " ")}}
+          </td>
+          </tr>
+        </template>
+      </table>
+      </div>
+    </div>
 </template>
 
 <script>

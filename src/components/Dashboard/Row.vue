@@ -1,20 +1,11 @@
 <template>
   <div class="main-container">
     
-
-    <div class="support-tickets panel panel-info">
-      <div class="panel-heading">
-      <h3>Support tickets</h3>
-      </div>
-      <div class="panel-body">
-        <SupportTicketsTable :supportTickets="supportTickets"></SupportTicketsTable>
-      </div>
-    </div>
+    <SupportTicketsTable v-if="page1" :supportTickets="supportTickets"></SupportTicketsTable>
+    <SupportTicketsTable v-else :supportTickets="supportTicketsPage2"></SupportTicketsTable>
        
-    <Row1 :mockData="mockData" 
-    :nrOfSupportTickets="nrOfSupportTickets"></Row1>
+    <Row1 :mockData="mockData" :nrOfSupportTickets="nrOfSupportTickets"></Row1>
     
-
   </div>
 </template>
 
@@ -36,38 +27,67 @@ export default {
     return {
         mockData: mockData,
         supportTickets: [],
+        supportTicketsPage2: [],
         nrOfSupportTickets: "",
-        APIkey: Key.key
+        APIkey: Key.key,
+        page1: true,
+        page2: false
     }
   },
   methods: {
-    setSupportTickets(tickets){
-    
-      this.supportTickets = this.sortTickets(tickets);
-      this.nrOfSupportTickets = tickets.length;
-
-    },
     getSupportTickets(urlParameters){
       fetch(`http://redmine.westart.se/issues.json?key=${this.APIkey}&${urlParameters}`)
         .then(response => response.json())
         .then((response) => {
           this.setSupportTickets(response.issues);
-        })
+        });
     },
-    sortTickets(tickets){
-      tickets.sort((a,b) => a.priority.name === "Hög") ? 1 : ((b.priority.name === "Omedelbar") ? -1 : 0);
+    setSupportTickets(tickets){
+      
+      this.nrOfSupportTickets = tickets.length;
 
-      const highPriority = tickets.filter(response => response.priority.name === "Hög" 
+      tickets = this.setTicketsInOrder(tickets);
+
+        if (tickets.length > 10) {
+          this.supportTicketsPage2 = tickets.slice(10);
+          this.supportTickets = tickets.splice(0, 10);
+        } else {
+          this.supportTickets = tickets;
+        }
+
+    },
+    setTicketsInOrder(tickets){
+
+      const highPriorityTickets = tickets
+      .filter(response => response.priority.name === "Hög" 
       || response.priority.name === "Omedelbar" || response.priority.name === "Brådskande"); 
 
-      return highPriority;
+      highPriorityTickets.sort(this.sortTickets);
+
+      return highPriorityTickets;
+    },
+    sortTickets(tickets){
+      let sortingOrder;
+
+      if (tickets.priority.name === "Hög") sortingOrder = 1;
+      else if (tickets.priority.name === "Omedelbar") sortingOrder = -1;
+      return sortingOrder;
     }
     
   },
   created(){
      this.getSupportTickets("limit=100");
-     setInterval(this.getSupportTickets("limit=100"), 10000);
-  } 
+     //setInterval(this.getSupportTickets("limit=100"), 10000);
+     
+  },
+  mounted(){
+    /* setInterval(() => {
+       this.page1 = false;
+     }, 5000)
+     setInterval(() => {
+       this.page1 = true;
+     }, 10000) */
+  }
 }
 </script>
 
@@ -81,7 +101,7 @@ export default {
 }
 
 .support-tickets .panel-body{
-  width: 90%;
+  width: 95%;
   margin: 0px auto;
 }
   
