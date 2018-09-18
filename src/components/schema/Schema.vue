@@ -31,7 +31,7 @@ export default {
     'Table': Table
   },
   created(){
-    console.log(mockSchema)
+    console.log(mockSchema);
   }
 }
 

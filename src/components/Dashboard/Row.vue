@@ -1,16 +1,16 @@
 <template>
   <div class="main-container">
     
-    <div class="grid">
-      <div class="col-12 panel panel-info">
-        <div class="panel-heading">
-        <h3>Support tickets</h3>
-        </div>
-        <div class="panel-body">
-          <SupportTicketsTable :supportTickets="supportTickets"></SupportTicketsTable>
-        </div>
+
+    <div class="support-tickets panel panel-info">
+      <div class="panel-heading">
+      <h3>Support tickets</h3>
+      </div>
+      <div class="panel-body">
+        <SupportTicketsTable :supportTickets="supportTickets"></SupportTicketsTable>
       </div>
     </div>
+       
     <Row1 :mockData="mockData" 
     :nrOfSupportTickets="nrOfSupportTickets"></Row1>
     
@@ -37,24 +37,36 @@ export default {
         mockData: mockData,
         supportTickets: [],
         nrOfSupportTickets: "",
-        key: Key.key
+        APIkey: Key.key
     }
   },
   methods: {
     setSupportTickets(tickets){
-        tickets = tickets.issues;
-        const highPriority = tickets.filter(response => response.priority.name === "Hög")
-        this.supportTickets = highPriority
-        this.nrOfSupportTickets = tickets.length
+    
+      this.supportTickets = this.sortTickets(tickets);
+      this.nrOfSupportTickets = tickets.length;
+
+    },
+    getSupportTickets(urlParameters){
+      fetch(`http://redmine.westart.se/issues.json?key=${this.APIkey}&${urlParameters}`)
+        .then(response => response.json())
+        .then((response) => {
+          this.setSupportTickets(response.issues);
+        })
+    },
+    sortTickets(tickets){
+      tickets.sort((a,b) => a.priority.name === "Hög") ? 1 : ((b.priority.name === "Omedelbar") ? -1 : 0);
+
+      const highPriority = tickets.filter(response => response.priority.name === "Hög" 
+      || response.priority.name === "Omedelbar" || response.priority.name === "Brådskande"); 
+
+      return highPriority;
     }
     
   },
-  created: function(){
-     fetch(`http://redmine.westart.se/issues.json?key=${this.key}&limit=100`)
-      .then(response => response.json())
-      .then((response) => {
-        this.setSupportTickets(response)
-      })
+  created(){
+     this.getSupportTickets("limit=100");
+     setInterval(this.getSupportTickets("limit=100"), 10000);
   } 
 }
 </script>
@@ -62,17 +74,15 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 
-table tr:nth-child(even){
-  background-color: #d9edf7;
+.support-tickets{
+  width: 98%;
+  margin: 0px auto; 
+  margin-bottom: 20px; 
 }
 
-table td{
-  padding: 10px;
-  border: 1px solid #bce8f1;
-}
-
-table th{
-  padding: 10px;
+.support-tickets .panel-body{
+  width: 90%;
+  margin: 0px auto;
 }
   
 div.main-container{
@@ -86,6 +96,7 @@ div.main-container{
   margin: 0px auto;
   color: #31708f;
   font-weight: 700;
+  text-align: center;
 }
 
 p{
@@ -100,8 +111,6 @@ p{
 div.row1{
   background-color: #FFF;
   text-align: center;
- /* 
-  margin-top: 2em; */
 }
 
 .hours{
@@ -128,20 +137,23 @@ div.graph{
 .diagram-wrapper{
   flex-basis: 50%;
 }
+
 .diagram-wrapper .panel{
   height: 100%;
 }
+
 .four-wrap{
   flex-basis: 50%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
+
 div.row1{
-  flex-basis: 44%;
+  flex-basis: 46%;
 }
 
 .no-margin{
   margin: 0;
-}
+} 
 </style>
