@@ -58,7 +58,6 @@
 
 <script>
 export default {
-  props: ['mockData', 'nrOfSupportTickets']
-
-}
+  props: ["mockData", "nrOfSupportTickets"]
+};
 </script>

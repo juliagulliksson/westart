@@ -10,107 +10,136 @@
 </template>
 
 <script>
-
-import mockData from '../../mockdata.json'
-import Row1 from './Row1'
-import SupportTicketsTable from './SupportTicketsTable';
-import Key from '../../key.json';
+import mockData from "../../mockdata.json";
+import Row1 from "./Row1";
+import SupportTicketsTable from "./SupportTicketsTable";
+import Key from "../../key.json";
 
 export default {
-  name: 'Row',
+  name: "Row",
   components: {
-    'Row1': Row1,
-    'SupportTicketsTable': SupportTicketsTable
+    Row1: Row1,
+    SupportTicketsTable: SupportTicketsTable
   },
-  
-  data () {
+
+  data() {
     return {
-        mockData: mockData,
-        supportTickets: [],
-        supportTicketsPage2: [],
-        nrOfSupportTickets: "",
-        APIkey: Key.key,
-        page1: true,
-        page2: false
-    }
+      mockData: mockData,
+      supportTickets: [],
+      supportTicketsPage2: [],
+      nrOfSupportTickets: "",
+      APIkey: Key.key,
+      page1: true
+    };
   },
   methods: {
-    getSupportTickets(urlParameters){
-      fetch(`http://redmine.westart.se/issues.json?key=${this.APIkey}&${urlParameters}`)
+    getSupportTickets(urlParameters) {
+      fetch(
+        `http://redmine.westart.se/issues.json?key=${
+          this.APIkey
+        }&${urlParameters}`
+      )
         .then(response => response.json())
-        .then((response) => {
+        .then(response => {
           this.setSupportTickets(response.issues);
         });
     },
-    setSupportTickets(tickets){
-      
+    setSupportTickets(tickets) {
       this.nrOfSupportTickets = tickets.length;
 
-      tickets = this.setTicketsInOrder(tickets);
+      tickets = this.sortAndFilterTickets(tickets);
 
-        if (tickets.length > 10) {
-          this.supportTicketsPage2 = tickets.slice(10);
-          this.supportTickets = tickets.splice(0, 10);
-        } else {
-          this.supportTickets = tickets;
+      if (tickets.length > 10) {
+        this.supportTicketsPage2 = tickets.slice(10);
+        this.supportTickets = tickets.splice(0, 10);
+      } else {
+        this.supportTickets = tickets;
+      }
+    },
+    sortAndFilterTickets(tickets) {
+      const highPriorityTickets = tickets.filter(
+        ticket =>
+          ticket.priority.name === "Hög" ||
+          ticket.priority.name === "Omedelbar" ||
+          ticket.priority.name === "Brådskande"
+      );
+
+      const noCostumerFeedback = highPriorityTickets.filter(
+        ticket => ticket.status.name != "Waiting for customer feedback"
+      );
+      //Get the "Waiting for costumer feedback" tickets updated 5 or more days ago
+      const filteredTickets = this.sortCostumerFeedbackTickets(
+        highPriorityTickets,
+        noCostumerFeedback
+      );
+
+      filteredTickets.sort(this.sortTickets);
+
+      return filteredTickets;
+    },
+    sortCostumerFeedbackTickets(highPriorityTickets, ticketArray) {
+      const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+      let today = new Date();
+
+      const customerFeedBackTickets = highPriorityTickets.filter(
+        ticket => ticket.status.name === "Waiting for customer feedback"
+      );
+
+      for (let ticket of customerFeedBackTickets) {
+        let updateDate = new Date(ticket.updated_on);
+        //Calculate the day difference between today and the date the ticket was last updated on
+        let diffDays = Math.round(
+          Math.abs((today.getTime() - updateDate.getTime()) / oneDay)
+        );
+        if (diffDays >= 5) {
+          //Push the tickets where Status = "Waiting for costumer feedback" and updated_on is 5 or more days ago
+          ticketArray.push(ticket);
         }
-
+      }
+      return ticketArray;
     },
-    setTicketsInOrder(tickets){
-
-      const highPriorityTickets = tickets
-      .filter(response => response.priority.name === "Hög" 
-      || response.priority.name === "Omedelbar" || response.priority.name === "Brådskande"); 
-
-      highPriorityTickets.sort(this.sortTickets);
-
-      return highPriorityTickets;
-    },
-    sortTickets(tickets){
+    sortTickets(tickets) {
       let sortingOrder;
 
       if (tickets.priority.name === "Hög") sortingOrder = 1;
       else if (tickets.priority.name === "Omedelbar") sortingOrder = -1;
       return sortingOrder;
     }
-    
   },
-  created(){
-     this.getSupportTickets("limit=100");
-     //setInterval(this.getSupportTickets("limit=100"), 10000);
-     
+  created() {
+    this.getSupportTickets("limit=100");
+    //setInterval(this.getSupportTickets("limit=100"), 10000);
   },
-  mounted(){
+  mounted() {
     /* setInterval(() => {
-       this.page1 = false;
-     }, 5000)
-     setInterval(() => {
-       this.page1 = true;
-     }, 10000) */
+      this.page1 = false;
+    }, 5000);
+    setInterval(() => {
+      this.page1 = true;
+    }, 10000); */
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-
-.support-tickets{
+.support-tickets {
   width: 98%;
-  margin: 0px auto; 
-  margin-bottom: 20px; 
+  margin: 0px auto;
+  margin-bottom: 20px;
 }
 
-.support-tickets .panel-body{
+.support-tickets .panel-body {
   width: 95%;
   margin: 0px auto;
 }
-  
-div.main-container{
+
+div.main-container {
   width: 80%;
   margin: 0px auto;
 }
 
-.panel-heading h3{
+.panel-heading h3 {
   font-size: 1.2em;
   padding: 0.6em 0em 0.4em 0em;
   margin: 0px auto;
@@ -119,61 +148,64 @@ div.main-container{
   text-align: center;
 }
 
-p{
+p {
   font-size: 2em;
   margin: 0.5em 0em;
 }
 
-[class*=col-], [class*=col_], [class~=col]{
+[class*="col-"],
+[class*="col_"],
+[class~="col"] {
   padding: 0;
 }
 
-div.row1{
-  background-color: #FFF;
+div.row1 {
+  background-color: #fff;
   text-align: center;
 }
 
-.hours{
+.hours {
   color: indianred;
-} 
+}
 
-.tickets{
+.tickets {
   color: rgb(57, 97, 134);
 }
 
-div.graph{
+div.graph {
   height: 300px;
 }
 
-.panel-heading{
+.panel-heading {
   border-radius: 0;
 }
 
-.dashboard-wrapper{
+.dashboard-wrapper {
   display: flex;
   justify-content: space-between;
 }
 
-.diagram-wrapper{
-  flex-basis: 50%;
+.diagram-wrapper {
+  flex-basis: 49%;
+  margin-left: 14px;
 }
 
-.diagram-wrapper .panel{
+.diagram-wrapper .panel {
   height: 100%;
 }
 
-.four-wrap{
+.four-wrap {
   flex-basis: 50%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
-div.row1{
+div.row1 {
   flex-basis: 46%;
 }
 
-.no-margin{
+.no-margin {
   margin: 0;
-} 
+}
 </style>

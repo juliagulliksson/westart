@@ -43,14 +43,12 @@
 
 <script>
 export default {
-  props: ['mockSchema']
-}
+  props: ["mockSchema"]
+};
 </script>
 
 <style>
-
-th{
+th {
   padding: 0em 3em;
 }
-
 </style>

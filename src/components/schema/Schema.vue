@@ -16,56 +16,52 @@
 
 
 <script>
-import Table from './Table'
-import mockSchema from '../../mockschema.json'
+import Table from "./Table";
+import mockSchema from "../../mockschema.json";
 
 export default {
   name: "Schema",
-  data(){
+  data() {
     return {
-      mockSchema: mockSchema.map(mockSchema => mockSchema.cm),
-     /*   cm: mockSchema.map(mockSchema => mockSchema.name) */
-    }
+      mockSchema: mockSchema.map(mockSchema => mockSchema.cm)
+      /*   cm: mockSchema.map(mockSchema => mockSchema.name) */
+    };
   },
   components: {
-    'Table': Table
+    Table: Table
   },
-  created(){
+  created() {
     console.log(mockSchema);
   }
-}
-
+};
 </script>
 
 <style>
-
-
-.table{
+.table {
   text-align: center;
-    width: 60%; 
+  width: 60%;
   margin: 0px auto;
 }
 
-table td{
+table td {
   padding: 10px 30px;
   border: 1px solid black;
 }
 
-.th-days th{
+.th-days th {
   border-top: 1px solid black;
- 
 }
 
-.th-dates th, .th-days th{
+.th-dates th,
+.th-days th {
   padding: 5px 30px;
-  border-left:1px solid black;
+  border-left: 1px solid black;
   border-right: 1px solid black;
   color: #31708f;
   background-color: #d9edf7;
   border-color: #31708f;
   text-align: center;
 }
-
 
 /* th{
    padding: 0em 3em;

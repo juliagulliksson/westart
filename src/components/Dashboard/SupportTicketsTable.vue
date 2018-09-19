@@ -51,20 +51,19 @@
 </template>
 
 <script>
-export default{
-  props: ['supportTickets']
-}
-
-
-
+export default {
+  props: {
+    supportTickets: Array
+  }
+};
 </script>
 
 <style>
-table{
+table {
   width: 100%;
 }
 
-.red{
+.red {
   color: rgb(197, 8, 8);
   font-weight: 700;
 }
@@ -73,21 +72,20 @@ table{
   background-color: #d9edf7;
 } */
 
-.immediate{
+.immediate {
   background-color: rgb(247, 199, 199);
 }
 
-.immediate td{
+.immediate td {
   border: 1px solid rgb(212, 111, 111);
 }
 
-table td{
+table td {
   padding: 10px;
   border: 1px solid #bbbcbd;
 }
 
-table th{
+table th {
   padding: 10px;
 }
-
 </style>
