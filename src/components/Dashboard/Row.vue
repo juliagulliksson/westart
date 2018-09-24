@@ -5,11 +5,13 @@
     <SupportTicketsTable v-else :supportTickets="supportTicketsPage2"></SupportTicketsTable>
        
     <Row1 :mockData="mockData" :nrOfSupportTickets="nrOfSupportTickets"></Row1>
+ <!--   <div id="container" style="width:100%; height:400px;"></div> -->
     
   </div>
 </template>
 
 <script>
+var Highcharts = require("highcharts");
 import mockData from "../../mockdata.json";
 import Row1 from "./Row1";
 import SupportTicketsTable from "./SupportTicketsTable";
@@ -47,16 +49,25 @@ export default {
     setSupportTickets(tickets) {
       this.nrOfSupportTickets = tickets.length;
 
-      tickets = this.sortAndFilterTickets(tickets);
+      tickets = this.filterTickets(tickets);
+      tickets.sort(this.sortTickets);
+      console.log(tickets);
 
       if (tickets.length > 10) {
-        this.supportTicketsPage2 = tickets.slice(10);
         this.supportTickets = tickets.splice(0, 10);
+        this.supportTicketsPage2 = this.setPage2Tickets(tickets);
       } else {
         this.supportTickets = tickets;
       }
     },
-    sortAndFilterTickets(tickets) {
+    setPage2Tickets(tickets) {
+      let page2Tickets = tickets.slice(10);
+      if (page2Tickets.length > 10) {
+        page2Tickets = page2Tickets.splice(0, 10);
+      }
+      return page2Tickets;
+    },
+    filterTickets(tickets) {
       const highPriorityTickets = tickets.filter(
         ticket =>
           ticket.priority.name === "Hög" ||
@@ -67,32 +78,32 @@ export default {
       const noCostumerFeedback = highPriorityTickets.filter(
         ticket => ticket.status.name != "Waiting for customer feedback"
       );
-      //Get the "Waiting for costumer feedback" tickets updated 5 or more days ago
+      /*Get the "Waiting for costumer feedback" tickets updated 5 or more days ago
+      If there are none, the function returns the original noCustomerFeedback array */
       const filteredTickets = this.sortCostumerFeedbackTickets(
         highPriorityTickets,
         noCostumerFeedback
       );
 
-      filteredTickets.sort(this.sortTickets);
-
       return filteredTickets;
     },
     sortCostumerFeedbackTickets(highPriorityTickets, ticketArray) {
       const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-      let today = new Date();
+      const today = new Date();
 
       const customerFeedBackTickets = highPriorityTickets.filter(
         ticket => ticket.status.name === "Waiting for customer feedback"
       );
 
       for (let ticket of customerFeedBackTickets) {
-        let updateDate = new Date(ticket.updated_on);
-        //Calculate the day difference between today and the date the ticket was last updated on
-        let diffDays = Math.round(
+        const updateDate = new Date(ticket.updated_on);
+        //Calculate the difference of days between today and the date the ticket was last updated on
+        const diffDays = Math.round(
           Math.abs((today.getTime() - updateDate.getTime()) / oneDay)
         );
         if (diffDays >= 5) {
-          //Push the tickets where Status = "Waiting for costumer feedback" and updated_on is 5 or more days ago
+          /*Push the tickets where Status = "Waiting for costumer feedback"
+           and updated_on date is 5 or more days ago*/
           ticketArray.push(ticket);
         }
       }
@@ -108,7 +119,10 @@ export default {
   },
   created() {
     this.getSupportTickets("limit=100");
-    //setInterval(this.getSupportTickets("limit=100"), 10000);
+    //Get support tickets every 5 minutes
+    setInterval(() => {
+      this.getSupportTickets("limit=100");
+    }, 300000);
   },
   mounted() {
     /* setInterval(() => {
@@ -117,9 +131,36 @@ export default {
     setInterval(() => {
       this.page1 = true;
     }, 10000); */
+    var myChart = Highcharts.chart("container", {
+      chart: {
+        type: "bar"
+      },
+      title: {
+        text: "Fruit Consumption"
+      },
+      xAxis: {
+        categories: ["Apples", "Bananas", "Oranges"]
+      },
+      yAxis: {
+        title: {
+          text: "Fruit eaten"
+        }
+      },
+      series: [
+        {
+          name: "Jane",
+          data: [1, 0, 4]
+        },
+        {
+          name: "John",
+          data: [5, 7, 3]
+        }
+      ]
+    });
   }
 };
 </script>
+
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>

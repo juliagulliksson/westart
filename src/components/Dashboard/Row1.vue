@@ -7,11 +7,12 @@
         <div class="panel-heading">
           <h3>Svarstid support</h3>
         </div>
-        <div class="panel-body">
-          (Diagram)
+        <div class="panel-body" id="container">
+           
         </div>
       </div>
     </div>
+    
       
       <div class="four-wrap">
           <div class="row1 panel panel-info">

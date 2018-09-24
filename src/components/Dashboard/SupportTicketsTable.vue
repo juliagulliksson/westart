@@ -38,10 +38,10 @@
           </td>
           
           <td>
-            {{supportTicket.created_on.slice(0, 16).replace("T", " ")}}
+            {{ sliceDate(supportTicket.created_on) }}
           </td> 
           <td>
-            {{supportTicket.updated_on.slice(0, 16).replace("T", " ")}}
+            {{ sliceDate(supportTicket.updated_on) }}
           </td>
           </tr>
         </template>
@@ -54,6 +54,11 @@
 export default {
   props: {
     supportTickets: Array
+  },
+  methods: {
+    sliceDate(date) {
+      return date.slice(0, 16).replace("T", " ");
+    }
   }
 };
 </script>
@@ -67,10 +72,6 @@ table {
   color: rgb(197, 8, 8);
   font-weight: 700;
 }
-
-/* table tr:nth-child(even){
-  background-color: #d9edf7;
-} */
 
 .immediate {
   background-color: rgb(247, 199, 199);
