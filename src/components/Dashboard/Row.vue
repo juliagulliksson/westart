@@ -50,7 +50,6 @@ export default {
 
       tickets = this.filterTickets(tickets);
       tickets.sort(this.sortTickets);
-      console.log(tickets);
 
       if (tickets.length > 10) {
         this.supportTickets = tickets.splice(0, 10);
@@ -113,6 +112,7 @@ export default {
 
       if (tickets.priority.name === "Hög") sortingOrder = 1;
       else if (tickets.priority.name === "Omedelbar") sortingOrder = -1;
+      else if (tickets.priority.name === "Brådskande") sortingOrder = -1;
       return sortingOrder;
     }
   },
@@ -183,8 +183,6 @@ div.graph {
 
 .panel-heading {
   border-radius: 0;
-  height: 60px;
-  padding-bottom: 1.5em;
 }
 
 .margin {

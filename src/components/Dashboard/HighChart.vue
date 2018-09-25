@@ -21,7 +21,6 @@ export default {
         categories: this.weeks
       },
       yAxis: {
-        color: "#2bd86d",
         title: {
           text: "Antal ärenden"
         }
@@ -48,7 +47,7 @@ export default {
           type: "spline",
           name: "nrOfTickets",
           data: this.nrOfTicketsPerWeek,
-          color: "#2bd86d"
+          color: "#77e03a"
         }
       ]
     });
