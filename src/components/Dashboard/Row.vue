@@ -11,7 +11,6 @@
 </template>
 
 <script>
-var Highcharts = require("highcharts");
 import mockData from "../../mockdata.json";
 import Row1 from "./Row1";
 import SupportTicketsTable from "./SupportTicketsTable";
@@ -131,32 +130,6 @@ export default {
     setInterval(() => {
       this.page1 = true;
     }, 10000); */
-    var myChart = Highcharts.chart("container", {
-      chart: {
-        type: "bar"
-      },
-      title: {
-        text: "Fruit Consumption"
-      },
-      xAxis: {
-        categories: ["Apples", "Bananas", "Oranges"]
-      },
-      yAxis: {
-        title: {
-          text: "Fruit eaten"
-        }
-      },
-      series: [
-        {
-          name: "Jane",
-          data: [1, 0, 4]
-        },
-        {
-          name: "John",
-          data: [5, 7, 3]
-        }
-      ]
-    });
   }
 };
 </script>
@@ -178,15 +151,6 @@ export default {
 div.main-container {
   width: 80%;
   margin: 0px auto;
-}
-
-.panel-heading h3 {
-  font-size: 1.2em;
-  padding: 0.6em 0em 0.4em 0em;
-  margin: 0px auto;
-  color: #31708f;
-  font-weight: 700;
-  text-align: center;
 }
 
 p {
@@ -219,6 +183,20 @@ div.graph {
 
 .panel-heading {
   border-radius: 0;
+  height: 60px;
+  padding-bottom: 1.5em;
+}
+
+.margin {
+  margin-bottom: 30px;
+}
+
+.panel-heading h3 {
+  font-size: 1.2em;
+  color: #31708f;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .dashboard-wrapper {
@@ -236,14 +214,25 @@ div.graph {
 }
 
 .four-wrap {
-  flex-basis: 50%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  height: 40%;
+  /*  flex-basis: 45%; */
+  width: 95%;
+}
+
+.four-wrapper {
+  display: flex;
+  /*  align-items: center; */
+  justify-content: center;
+  flex-basis: 50%;
+  height: 470px;
 }
 
 div.row1 {
   flex-basis: 46%;
+  height: 100%;
 }
 
 .no-margin {
