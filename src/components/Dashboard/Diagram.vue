@@ -13,7 +13,8 @@ export default {
       APIkey: Key.key,
       nrOfSupportTicketsPerWeek: [],
       weeks: [],
-      dates: {}
+      dates: {},
+      averageDays: []
     };
   },
   components: {
@@ -36,34 +37,109 @@ export default {
         if (response.issues.length === 100) {
           //Get additional tickets
           this.getTickets(this.dates, "offset=100&limit=100").then(response => {
+            //Combine the 2 arrays
             tickets = tickets.concat(response.issues);
-            this.filterTicketsByDate(tickets);
+            this.setNrOfTicketsPerWeek(tickets);
+            this.setAverageCloseDays(tickets);
+            /* console.log(tickets); */
           });
         } else {
-          this.filterTicketsByDate(tickets);
+          this.setNrOfTicketsPerWeek(tickets);
+          this.setAverageCloseDays(tickets);
         }
       });
     },
-    filterTicketsByDate(tickets) {
-      let ticketWeekNumbers = [];
-      for (let ticket of tickets) {
-        let dateObj = new Date(ticket.created_on);
-        let weekNr = moment(dateObj).isoWeek();
-        ticketWeekNumbers.push(weekNr);
-      }
+    setNrOfTicketsPerWeek(tickets) {
+      const ticketWeekNumbers = this.getTicketWeekNumbers(tickets);
+      const nrOfTicketsPerWeek = this.getNrOfTicketsPerWeek(ticketWeekNumbers);
+      this.nrOfSupportTicketsPerWeek = nrOfTicketsPerWeek;
+    },
+    setAverageCloseDays(tickets) {
+      const closedTickets = tickets.filter(
+        ticket => ticket.status.name === "Closed"
+      );
+      /* 
+      console.log(closedTickets); */
 
       const weekNrs = this.returnWeekNumbers();
-      //Loop through weekNrs and get the number of tickets per week
-      let nrOfTicketsPerWeek = [];
-      for (let week of weekNrs) {
+      const weeksOfTickets = weekNrs.map(week => {
         week = Number(week);
-        let ticketsPerWeek = this.returnNrOfTicketsPerWeek(
-          ticketWeekNumbers,
-          week
-        );
-        nrOfTicketsPerWeek.push(ticketsPerWeek);
+        return {
+          week: week,
+          tickets: [],
+          averageCloseDays: [],
+          sumOfDays: ""
+        };
+      });
+
+      for (let ticket of tickets) {
+        let createdOnDate = new Date(ticket.created_on);
+        let createdOnWeek = moment(createdOnDate).isoWeek();
+        for (let week of weeksOfTickets) {
+          if (createdOnWeek == week.week) {
+            week.tickets.push(ticket);
+          }
+        }
       }
-      this.nrOfSupportTicketsPerWeek = nrOfTicketsPerWeek;
+      /* console.log(weeksOfTickets); */
+      let oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+      for (let week of weeksOfTickets) {
+        let diffDays;
+        for (let ticket of week.tickets) {
+          let closedOn = moment(ticket.closed_on);
+          closedOn = new Date(closedOn);
+          let createdOn = moment(ticket.created_on);
+          createdOn = new Date(createdOn);
+          diffDays = Math.round(
+            Math.abs((createdOn.getTime() - closedOn.getTime()) / oneDay)
+          );
+          //console.log(closedOn, createdOn);
+          week.averageCloseDays.push(diffDays);
+        }
+      }
+      /* console.log(weeksOfTickets); */
+      let arraySum = [];
+
+      for (let week of weeksOfTickets) {
+        let sum = 0;
+        /* console.log(week.averageCloseDays); */
+        for (let closeDays of week.averageCloseDays) {
+          if (!isNaN(closeDays)) {
+            sum += closeDays;
+          }
+        }
+        week.sumOfDays = sum;
+      }
+      /*  console.log(weeksOfTickets); */
+
+      for (let week of weeksOfTickets) {
+        //console.log(week.sumOfDays / week.tickets.length);
+        let total = week.sumOfDays / week.tickets.length;
+        total = Math.round(total * 10) / 10;
+        console.log(total);
+      }
+      console.log(weeksOfTickets);
+
+      /* for (let ticket of closedTickets) {
+        let closedOn = new Date(ticket.closed_on);
+        let createdOn = new Date(ticket.created_on);
+        let diffDays = Math.round(
+          Math.abs((createdOn.getTime() - closedOn.getTime()) / oneDay)
+        ); */
+      /* console.log(diffDays); */
+    },
+    getTicketWeekNumbers(tickets) {
+      return tickets.map(ticket => {
+        let createdOnDate = new Date(ticket.created_on);
+        return moment(createdOnDate).isoWeek();
+      });
+    },
+    getNrOfTicketsPerWeek(ticketWeekNrs) {
+      const weekNrs = this.returnWeekNumbers();
+      return weekNrs.map(week => {
+        week = Number(week);
+        return this.returnNrOfTicketsPerWeek(ticketWeekNrs, week);
+      });
     },
     returnNrOfTicketsPerWeek(array, weekNumber) {
       return array.filter(arr => arr === weekNumber).length;

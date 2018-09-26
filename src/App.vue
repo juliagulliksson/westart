@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <router-link to="/">Row</router-link>
-    <router-link to="/users">Users</router-link>
+    <router-link to="/">Dashboard</router-link>
     <router-link to="/schema">Schema</router-link>
     <router-view/>
   </div>
@@ -9,15 +8,15 @@
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App"
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
-body{
+body {
   background-color: #f7f9fc;
 }
 </style>

@@ -20,11 +20,37 @@ export default {
         },
         categories: this.weeks
       },
-      yAxis: {
-        title: {
-          text: "Antal ärenden"
+      yAxis: [
+        {
+          title: {
+            text: "Antal ärenden"
+          },
+          opposite: true
+        },
+        {
+          // Secondary yAxis
+          stackLabels: {
+            enabled: true,
+            style: {
+              fontWeight: "bold",
+              color: "gray"
+            }
+          },
+          gridLineWidth: 0,
+          title: {
+            text: "Lösningstid"
+            /* style: {
+                        color: Highcharts.getOptions().colors[0]
+                    } */
+          } /* ,
+          labels: {
+            format: " dagar"
+            style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+          } */
         }
-      },
+      ],
       plotOptions: {
         column: {
           stacking: "normal"
@@ -32,6 +58,16 @@ export default {
       },
       series: [
         {
+          name: "Lösningstid",
+          type: "column",
+          yAxis: 1,
+          data: [2, 5, 6, 7, 8],
+          tooltip: {
+            valueSuffix: " dagar"
+          }
+        },
+
+        /* {
           type: "column",
           name: "Customer answer time",
           data: [5, 7, 3, 7, 5],
@@ -42,10 +78,10 @@ export default {
           name: "WestArt answer time",
           data: [5, 7, 6, 3, 8],
           stack: "time"
-        },
+        }, */
         {
           type: "spline",
-          name: "nrOfTickets",
+          name: "Ärenden",
           data: this.nrOfTicketsPerWeek,
           color: "#77e03a"
         }

@@ -1,27 +1,21 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Users from '@/components/Users' 
-import Row from '@/components/Dashboard/Row' 
-import Schema from '@/components/Schema/Schema'
+import Vue from "vue";
+import Router from "vue-router";
+import Dashboard from "@/components/Dashboard/Dashboard";
+import Schema from "@/components/Schema/Schema";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Row',
-      component: Row
+      path: "/",
+      name: "DashBoard",
+      component: Dashboard
     },
     {
-      path: '/users',
-      name: 'Users',
-      component: Users
-    },
-    {
-      path: '/schema',
-      name: 'Schema',
+      path: "/schema",
+      name: "Schema",
       component: Schema
-    } 
+    }
   ]
-})
+});
