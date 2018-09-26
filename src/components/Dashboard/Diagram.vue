@@ -1,5 +1,5 @@
 <template>
-  <HighChart :weeks="weeks" :nrOfTicketsPerWeek="nrOfSupportTicketsPerWeek"></HighChart>
+  <HighChart v-if="nrOfSupportTicketsPerWeek.length === 5" :weeks="weeks" :nrOfTicketsPerWeek="nrOfSupportTicketsPerWeek"></HighChart>
 </template>
 
 <script>
@@ -13,7 +13,6 @@ export default {
       APIkey: Key.key,
       nrOfSupportTicketsPerWeek: [],
       weeks: [],
-      isLoaded: false,
       dates: {}
     };
   },
@@ -30,40 +29,44 @@ export default {
         }&status_id=*&${urlParameters}`
       ).then(response => response.json());
     },
+    setTickets() {
+      let tickets;
+      this.getTickets(this.dates, "limit=100").then(response => {
+        tickets = response.issues;
+        if (response.issues.length === 100) {
+          //Get additional tickets
+          this.getTickets(this.dates, "offset=100&limit=100").then(response => {
+            tickets = tickets.concat(response.issues);
+            this.filterTicketsByDate(tickets);
+          });
+        } else {
+          this.filterTicketsByDate(tickets);
+        }
+      });
+    },
     filterTicketsByDate(tickets) {
-      //console.log(tickets);
       let ticketWeekNumbers = [];
       for (let ticket of tickets) {
         let dateObj = new Date(ticket.created_on);
         let weekNr = moment(dateObj).isoWeek();
-        //console.log(weekNr);
         ticketWeekNumbers.push(weekNr);
       }
 
-      console.log(ticketWeekNumbers);
-
       const weekNrs = this.returnWeekNumbers();
-      //Loop through weekNrs [34,35 etc], and get the number of tickets per week
-      /*  console.log(weekNrs); */
+      //Loop through weekNrs and get the number of tickets per week
+      let nrOfTicketsPerWeek = [];
       for (let week of weekNrs) {
-        //console.log(week);
-        week = week.toString();
-        console.log(this.filterWeek(ticketWeekNumbers, week));
+        week = Number(week);
+        let ticketsPerWeek = this.returnNrOfTicketsPerWeek(
+          ticketWeekNumbers,
+          week
+        );
+        nrOfTicketsPerWeek.push(ticketsPerWeek);
       }
+      this.nrOfSupportTicketsPerWeek = nrOfTicketsPerWeek;
     },
-    filterWeek(array, weekNumber) {
+    returnNrOfTicketsPerWeek(array, weekNumber) {
       return array.filter(arr => arr === weekNumber).length;
-    },
-    returnDateValues() {
-      const dates = [
-        this.setDates(35, 35),
-        this.setDates(28, 28),
-        this.setDates(21, 21),
-        this.setDates(14, 14),
-        this.setDates(7, 7)
-      ];
-
-      return dates;
     },
     setDates(startDate, endDate) {
       return {
@@ -79,29 +82,15 @@ export default {
         .isoWeekday("Monday");
     },
     returnWeekNumbers() {
-      return [
-        this.getDates(35).format("w"),
-        this.getDates(28).format("w"),
-        this.getDates(21).format("w"),
-        this.getDates(14).format("w"),
-        this.getDates(7).format("w")
-      ];
+      //Calculate the week numbers by offsetting the number of days, i.e 35 days = 5 weeks ago
+      let dayOffsets = [35, 28, 21, 14, 7];
+      return dayOffsets.map(day => this.getDates(day).format("w"));
     }
   },
   created() {
     this.dates = this.setDates(35, 7);
-    let tickets;
-    this.getTickets(this.dates, "limit=100").then(response => {
-      tickets = response.issues;
-      if (response.issues.length === 100) {
-        this.getTickets(this.dates, "offset=100&limit=100").then(response => {
-          tickets = tickets.concat(response.issues);
-          this.filterTicketsByDate(tickets);
-        });
-      }
-    });
-    const weeks = this.returnWeekNumbers();
-    this.weeks = weeks;
+    this.weeks = this.returnWeekNumbers();
+    this.setTickets();
   }
 };
 </script>
