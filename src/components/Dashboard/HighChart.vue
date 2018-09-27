@@ -5,7 +5,7 @@
 <script>
 const Highcharts = require("highcharts");
 export default {
-  props: ["weeks", "nrOfTicketsPerWeek"],
+  props: ["weeks", "nrOfTicketsPerWeek", "averageCloseDays"],
   mounted() {
     const supportChart = Highcharts.chart("container", {
       chart: {
@@ -61,7 +61,7 @@ export default {
           name: "Lösningstid",
           type: "column",
           yAxis: 1,
-          data: [2, 5, 6, 7, 8],
+          data: this.averageCloseDays,
           tooltip: {
             valueSuffix: " dagar"
           }
