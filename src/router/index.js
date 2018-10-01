@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Dashboard from "@/components/Dashboard/Dashboard";
-import Schema from "@/components/Schema/Schema";
+import Schedule from "@/components/Schedule/Schedule";
 
 Vue.use(Router);
 
@@ -13,9 +13,9 @@ export default new Router({
       component: Dashboard
     },
     {
-      path: "/schema",
-      name: "Schema",
-      component: Schema
+      path: "/Schedule",
+      name: "Schedule",
+      component: Schedule
     }
   ]
 });

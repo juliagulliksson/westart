@@ -1,8 +1,8 @@
 <template>
   <div class="main-container">
     
-    <SupportTicketsTable v-if="page1" :supportTickets="supportTickets"></SupportTicketsTable>
-    <SupportTicketsTable v-else :supportTickets="supportTicketsPage2"></SupportTicketsTable>
+    <SupportTicketsTable :supportTickets="supportTickets"></SupportTicketsTable>
+   <!--  <SupportTicketsTable v-else :supportTickets="supportTicketsPage2"></SupportTicketsTable> -->
        
     <Row1 :mockData="mockData" :nrOfSupportTickets="nrOfSupportTickets"></Row1>
  <!--   <div id="container" style="width:100%; height:400px;"></div> -->
@@ -14,36 +14,30 @@
 import mockData from "../../mockdata.json";
 import Row1 from "./Row1";
 import SupportTicketsTable from "./SupportTicketsTable";
-import Key from "../../key.json";
+import { DiffDays } from "./mixins/DiffDays.js";
+import { GetTickets } from "./mixins/GetTickets.js";
 
 export default {
-  name: "Row",
+  name: "Dashboard",
   components: {
     Row1: Row1,
     SupportTicketsTable: SupportTicketsTable
   },
-
   data() {
     return {
       mockData: mockData,
       supportTickets: [],
       supportTicketsPage2: [],
       nrOfSupportTickets: "",
-      APIkey: Key.key,
       page1: true
     };
   },
+  mixins: [DiffDays, GetTickets],
   methods: {
-    getSupportTickets(urlParameters) {
-      fetch(
-        `http://redmine.westart.se/issues.json?key=${
-          this.APIkey
-        }&${urlParameters}`
-      )
-        .then(response => response.json())
-        .then(response => {
-          this.setSupportTickets(response.issues);
-        });
+    getSupportTickets() {
+      this.getTickets("limit=100").then(response => {
+        this.setSupportTickets(response.issues);
+      });
     },
     setSupportTickets(tickets) {
       this.nrOfSupportTickets = tickets.length;
@@ -65,13 +59,16 @@ export default {
       }
       return page2Tickets;
     },
-    filterTickets(tickets) {
-      const highPriorityTickets = tickets.filter(
+    returnHighPriorityTickets(tickets) {
+      return tickets.filter(
         ticket =>
           ticket.priority.name === "Hög" ||
           ticket.priority.name === "Omedelbar" ||
           ticket.priority.name === "Brådskande"
       );
+    },
+    filterTickets(tickets) {
+      const highPriorityTickets = this.returnHighPriorityTickets(tickets);
 
       const noCostumerFeedback = highPriorityTickets.filter(
         ticket => ticket.status.name != "Waiting for customer feedback"
@@ -86,7 +83,6 @@ export default {
       return filteredTickets;
     },
     sortCostumerFeedbackTickets(highPriorityTickets, ticketArray) {
-      const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
       const today = new Date();
 
       const customerFeedBackTickets = highPriorityTickets.filter(
@@ -96,8 +92,9 @@ export default {
       for (let ticket of customerFeedBackTickets) {
         const updateDate = new Date(ticket.updated_on);
         //Calculate the difference of days between today and the date the ticket was last updated on
-        const diffDays = Math.round(
-          Math.abs((today.getTime() - updateDate.getTime()) / oneDay)
+        const diffDays = this.returnDiffDays(
+          today.getTime(),
+          updateDate.getTime()
         );
         if (diffDays >= 5) {
           /*Push the tickets where Status = "Waiting for costumer feedback"
@@ -117,19 +114,19 @@ export default {
     }
   },
   created() {
-    this.getSupportTickets("limit=100");
+    this.getSupportTickets();
     //Get support tickets every 5 minutes
     setInterval(() => {
-      this.getSupportTickets("limit=100");
+      this.getSupportTickets();
     }, 300000);
   },
   mounted() {
-    /* setInterval(() => {
+    setInterval(() => {
       this.page1 = false;
-    }, 5000);
+    }, 10000);
     setInterval(() => {
       this.page1 = true;
-    }, 10000); */
+    }, 30000);
   }
 };
 </script>

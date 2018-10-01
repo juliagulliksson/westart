@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-link to="/">Dashboard</router-link>
-    <router-link to="/schema">Schema</router-link>
+    <router-link to="/schema">Schedule</router-link>
     <router-view/>
   </div>
 </template>
