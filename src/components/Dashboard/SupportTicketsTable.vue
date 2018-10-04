@@ -66,27 +66,54 @@ export default {
 <style>
 table {
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .red {
-  color: rgb(197, 8, 8);
+  /*  color: rgb(197, 8, 8); */
+  /* color: #ffcc00; */
   font-weight: 700;
 }
 
-.immediate {
-  background-color: rgb(247, 199, 199);
-}
+/* .immediate {
+  background-color: #44486b;
+} */
 
-.immediate td {
-  border: 1px solid rgb(212, 111, 111);
-}
+/* .immediate td {
+  color: #ffcc00;
+} */
+
+/* .immediate td {
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
+} */
 
 table td {
-  padding: 10px;
-  border: 1px solid #bbbcbd;
+  padding: 10px 0px 10px 0px;
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
+  color: hsla(0, 0%, 100%, 0.8);
+}
+
+table td:not(:last-child) {
+  padding-right: 10px;
+}
+
+table td:not(:first-child) {
+  padding-left: 10px;
 }
 
 table th {
-  padding: 10px;
+  padding: 10px 0px 10px 0px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: hsla(0, 0%, 100%, 0.7);
+  font-size: 0.9em;
+}
+
+table th:not(:last-child) {
+  padding-right: 10px;
+}
+table th:not(:first-child) {
+  padding-left: 10px;
 }
 </style>

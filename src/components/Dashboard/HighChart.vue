@@ -8,24 +8,52 @@ export default {
   props: ["weeks", "nrOfTicketsPerWeek", "averageCloseDays"],
   mounted() {
     const supportChart = Highcharts.chart("container", {
+      legend: {
+        itemStyle: {
+          color: "#9a9a9a"
+          /*  display: "none" */
+          /*             fontWeight: 'bold' */
+        }
+      },
       chart: {
-        type: "column"
+        type: "column",
+        backgroundColor: "#27293d",
+        style: {
+          fontFamily: "'Poppy', sans-serif",
+          letterSpacing: "1px",
+          fontSize: "1em"
+        }
       },
       title: {
-        text: "Svarstid Support"
+        text: "",
+        style: { color: "#FFF" }
       },
+
       xAxis: {
         title: {
-          text: "Vecka"
+          text: "Vecka",
+          style: { color: "#9a9a9a" }
         },
-        categories: this.weeks
+        categories: this.weeks,
+        labels: {
+          style: {
+            color: "#9a9a9a"
+          }
+        }
       },
       yAxis: [
         {
           title: {
-            text: "Antal ärenden"
+            text: "Antal ärenden",
+            style: { color: "#FFF" }
           },
-          opposite: true
+          opposite: true,
+          labels: {
+            style: {
+              color: "#FFF"
+            }
+          },
+          gridLineColor: "hsla(0, 0%, 100%, 0.1)"
         },
         {
           // Secondary yAxis
@@ -33,15 +61,20 @@ export default {
             enabled: true,
             style: {
               fontWeight: "bold",
-              color: "gray"
+              color: "#FFF"
             }
           },
           gridLineWidth: 0,
           title: {
-            text: "Lösningstid"
-            /* style: {
-                        color: Highcharts.getOptions().colors[0]
-                    } */
+            text: "Lösningstid",
+            style: {
+              color: "#FFF"
+            }
+          },
+          labels: {
+            style: {
+              color: "#FFF"
+            }
           } /* ,
           labels: {
             format: " dagar"
@@ -64,7 +97,21 @@ export default {
           data: this.averageCloseDays,
           tooltip: {
             valueSuffix: " dagar"
-          }
+          },
+          color: "transparent",
+          borderColor: "",
+          color: {
+            linearGradient: {
+              x1: 0,
+              x2: 0,
+              y1: 0,
+              y2: 1
+            },
+            stops: [[0, "#651778"], [1, "#27293d"]]
+          },
+          borderWidth: "2",
+          legendColor: "#FFF",
+          boxShadow: "120px 80px 40px 20px #0ff"
         },
 
         /* {
@@ -83,10 +130,17 @@ export default {
           type: "spline",
           name: "Ärenden",
           data: this.nrOfTicketsPerWeek,
-          color: "#77e03a"
+          color: "#FFCC00",
+          legendColor: "#FFF"
         }
       ]
     });
   }
 };
 </script>
+
+<style>
+#container {
+  background-color: #27293d;
+}
+</style>

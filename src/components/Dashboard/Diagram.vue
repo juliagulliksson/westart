@@ -57,8 +57,9 @@ export default {
       this.nrOfSupportTicketsPerWeek = tickets;
     },
     setWeeksOfTickets(tickets) {
-      //Set objects to an array, with empty values except for week numbers
+      // Set objects to an array, with empty values except for week numbers
       let weeksOfTickets = this.setWeekObjects();
+      // Add tickets to every week
       weeksOfTickets = this.setTicketsToWeekObjects(tickets, weeksOfTickets);
       this.weeksOfTickets = weeksOfTickets;
     },
@@ -79,7 +80,7 @@ export default {
     },
     setWeekObjects() {
       const weekNrs = this.returnWeekNumbers();
-      //Create the objects that will hold the tickets for the respective week
+      // Create the objects that will hold the tickets for the respective week
       return weekNrs.map(week => {
         week = Number(week);
         return {
@@ -100,9 +101,9 @@ export default {
     calculateCloseDays() {
       for (let week of this.weeksOfTickets) {
         for (let ticket of week.tickets) {
-          //Call function from DiffDaysMixin
           let dateFrom = this.getTicketDates(ticket.created_on);
           let dateTo = this.getTicketDates(ticket.closed_on);
+          // Function from DiffDays mixin
           week.closeDays.push(this.returnDiffDays(dateFrom, dateTo));
         }
       }
@@ -131,7 +132,6 @@ export default {
       // Calculate how many days between closed_on and created_on
       this.calculateCloseDays();
 
-      // Set the average close days for the respective weeks
       this.setAverageCloseDaysForWeeks();
 
       this.averageCloseDays = this.returnAverageCloseDays();

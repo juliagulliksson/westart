@@ -5,7 +5,6 @@
    <!--  <SupportTicketsTable v-else :supportTickets="supportTicketsPage2"></SupportTicketsTable> -->
        
     <Row1 :mockData="mockData" :nrOfSupportTickets="nrOfSupportTickets"></Row1>
- <!--   <div id="container" style="width:100%; height:400px;"></div> -->
     
   </div>
 </template>
@@ -16,6 +15,7 @@ import Row1 from "./Row1";
 import SupportTicketsTable from "./SupportTicketsTable";
 import { DiffDays } from "./mixins/DiffDays.js";
 import { GetTickets } from "./mixins/GetTickets.js";
+const moment = require("moment");
 
 export default {
   name: "Dashboard",
@@ -73,7 +73,7 @@ export default {
       const noCostumerFeedback = highPriorityTickets.filter(
         ticket => ticket.status.name != "Waiting for customer feedback"
       );
-      /*Get the "Waiting for costumer feedback" tickets updated 5 or more days ago
+      /* Get the "Waiting for costumer feedback" tickets updated 5 or more days ago
       If there are none, the function returns the original noCustomerFeedback array */
       const filteredTickets = this.sortCostumerFeedbackTickets(
         highPriorityTickets,
@@ -91,14 +91,14 @@ export default {
 
       for (let ticket of customerFeedBackTickets) {
         const updateDate = new Date(ticket.updated_on);
-        //Calculate the difference of days between today and the date the ticket was last updated on
+        // Calculate the difference of days between today and the date the ticket was last updated on
         const diffDays = this.returnDiffDays(
           today.getTime(),
           updateDate.getTime()
         );
         if (diffDays >= 5) {
-          /*Push the tickets where Status = "Waiting for costumer feedback"
-           and updated_on date is 5 or more days ago*/
+          /* Push the tickets where Status = "Waiting for costumer feedback"
+           and updated_on date is 5 or more days ago */
           ticketArray.push(ticket);
         }
       }
@@ -115,18 +115,32 @@ export default {
   },
   created() {
     this.getSupportTickets();
-    //Get support tickets every 5 minutes
+    // Get support tickets every 5 minutes
     setInterval(() => {
       this.getSupportTickets();
     }, 300000);
+    fetch(
+      "http://api.openweathermap.org/data/2.5/weather?lat=59.752852399999995&lon=18.7025318&appid=38825652b216759d64f897d81526a5fa&units=metric"
+    )
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        let sunrise = response.sys.sunrise;
+        let sunset = response.sys.sunset;
+        sunset = new Date(sunset * 1000);
+        sunrise = new Date(sunrise * 1000);
+
+        console.log(sunrise);
+        console.log(sunset);
+      });
   },
   mounted() {
-    setInterval(() => {
+    /* setInterval(() => {
       this.page1 = false;
     }, 10000);
     setInterval(() => {
       this.page1 = true;
-    }, 30000);
+    }, 30000); */
   }
 };
 </script>
@@ -161,17 +175,17 @@ p {
   padding: 0;
 }
 
-div.row1 {
-  background-color: #fff;
+div.row1 p {
   text-align: center;
 }
 
 .hours {
-  color: indianred;
+  color: #ed4736;
 }
 
-.tickets {
-  color: rgb(57, 97, 134);
+.panel-body p {
+  color: hsla(0, 0%, 100%, 0.8);
+  font-size: 2.6em;
 }
 
 div.graph {
@@ -182,16 +196,39 @@ div.graph {
   border-radius: 0;
 }
 
+body {
+  background-color: #05101d;
+}
+
+.panel-info > .panel-heading {
+  background-color: #27293d;
+  border: 0;
+}
+
+.panel-info {
+  border: 1px solid transparent;
+}
+
+.panel {
+  background-color: #27293d;
+  box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.panel-body {
+  background-color: #27293d;
+  padding: 5px;
+}
+
 .margin {
   margin-bottom: 30px;
 }
 
 .panel-heading h3 {
-  font-size: 1.2em;
-  color: #31708f;
-  font-weight: 700;
-  text-align: center;
+  font-size: 1.3em;
+  color: #fff;
+  font-weight: 200;
   margin-top: 10px;
+  padding-left: 25px;
 }
 
 .dashboard-wrapper {
@@ -228,6 +265,7 @@ div.graph {
 div.row1 {
   flex-basis: 46%;
   height: 100%;
+  background-color: #27293d;
 }
 
 .no-margin {
