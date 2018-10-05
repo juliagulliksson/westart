@@ -249,6 +249,7 @@ div.row1 {
 .weather-wrapper {
   display: flex;
   justify-content: space-around;
+  flex: 1 1 0;
 }
 
 .weather-wrapper p {
@@ -265,6 +266,10 @@ div.row1 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.weather-info {
+  flex-basis: 0;
 }
 
 .weather-flex-wrapper .panel-body {

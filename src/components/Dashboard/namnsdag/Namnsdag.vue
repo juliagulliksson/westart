@@ -1,7 +1,7 @@
 <template>
    <div class="row1 panel panel-info">
       <div class="panel-heading">
-          <h3>Namnsdag<span v-if="namnsdagar.length > 1">ar</span> {{today }}</h3>
+          <h3>Namnsdag {{today }}</h3>
         </div>
       <div class="namnsdag panel-body"> 
         <p v-for="(namn, index) in namnsdagar" :key="index">{{namn}}</p>
@@ -14,7 +14,7 @@ const moment = require("moment");
 export default {
   data() {
     return {
-      today: moment().format("DD/MM"),
+      today: "",
       namnsdagar: []
     };
   },
@@ -28,9 +28,16 @@ export default {
         .then(response => {
           this.namnsdagar = response.dagar[0].namnsdag;
         });
+    },
+    setToday() {
+      let today = new Date();
+      let options = { day: "numeric", month: "long" };
+      today = today.toLocaleDateString("se-SE", options);
+      this.today = today;
     }
   },
   created() {
+    this.setToday();
     this.fetchNamnsdag();
   }
 };

@@ -1,7 +1,8 @@
-<template>
+ <template>
+
   <WeatherWidget :weather="weather"></WeatherWidget>
 </template>
-
+ 
 <script>
 //import SmallWidget from "./SmallWidget";
 const moment = require("moment");
@@ -24,33 +25,61 @@ export default {
       )
         .then(response => response.json())
         .then(response => {
-          //console.log(response.list);
+          /* console.log(response.list); */
           this.setWeather(response.list);
           this.setIcons();
           this.setDates();
-          /*  let sunrise = response.sys.sunrise;
-        let sunset = response.sys.sunset;
-        sunset = new Date(sunset * 1000);
-        sunrise = new Date(sunrise * 1000);
-
-        console.log(sunrise);
-        console.log(sunset);
-        let imagePath =
-          "http://openweathermap.org/img/w/" +
-          response.weather[0].icon +
-          ".png";
-        console.log(imagePath); */
         });
     },
     setWeather(list) {
-      this.weather = list
-        .filter(w => w.dt_txt.substring(10, 13) == 12)
-        .splice(0, 3);
+      const weather = this.returnComingDaysWeather(list);
+      let todaysWeather = this.returnTodaysWeather(list);
+      // Add the coming weather for today first in the array
+      weather.unshift(todaysWeather[1]);
+
+      this.weather = weather;
+    },
+    returnComingDaysWeather(list) {
+      return list.filter(w => {
+        const weatherDate = new Date(w.dt_txt);
+        if (
+          this.checkIfDateIsTomorrow(weatherDate) ||
+          this.checkIfDateIsDayAfterTomorrow(weatherDate)
+        ) {
+          if (w.dt_txt.substring(10, 13) == 12) {
+            //If the forecast dates are for tomorrow or the day after tomorrow, and the time is 12 o'clock
+            return w;
+          }
+        }
+      });
+    },
+    returnTodaysWeather(list) {
+      return list.filter(w => {
+        const weatherDate = new Date(w.dt_txt);
+        if (this.checkIfDateIsToday(weatherDate)) {
+          return w;
+        }
+      });
+    },
+    checkIfDateIsToday(date) {
+      let today = new Date();
+      return today.toDateString() == date.toDateString();
+    },
+    checkIfDateIsTomorrow(date) {
+      let tomorrow = this.returnDates(1);
+      return tomorrow == date.toDateString();
+    },
+    checkIfDateIsDayAfterTomorrow(date) {
+      let dayAfter = this.returnDates(2);
+      return dayAfter == date.toDateString();
+    },
+    returnDates(dayOffSet) {
+      return moment()
+        .add(dayOffSet, "days")
+        .format("ddd MMM DD YYYY");
     },
     setIcons() {
       for (let w of this.weather) {
-        /* w.weather[0].icon =
-          "http://openweathermap.org/img/w/" + w.weather[0].icon + ".png"; */
         const prefix = "wi wi-";
         const code = w.weather[0].id;
         let icon = Icons[code].icon;
@@ -66,20 +95,22 @@ export default {
       }
     },
     setDates() {
-      const today = new Date();
-      const weatherDate = new Date(this.weather[1].dt_txt);
-      console.log(weatherDate);
-      let isToday = today.toDateString() == weatherDate.toDateString();
-      console.log(isToday);
-      /*    for (let w of this.weather) {
-        let date = new Date(w.dt_txt);
-        let options = {
-          weekday: "long"
-        };
-        date = date.toLocaleDateString("se-SE", options);
-        date = date.toUpperCase();
-        w.dt_txt = date;
-      } */
+      for (let w of this.weather) {
+        let weatherDate = new Date(w.dt_txt);
+        let hours = moment(weatherDate).format("HH:mm");
+        if (this.checkIfDateIsToday(weatherDate)) {
+          w.dt_txt = "Idag " + hours;
+        } else if (this.checkIfDateIsTomorrow(weatherDate)) {
+          w.dt_txt = "Imorgon " + hours;
+        } else if (this.checkIfDateIsDayAfterTomorrow(weatherDate)) {
+          let options = {
+            weekday: "long"
+          };
+          let date = weatherDate.toLocaleDateString("se-SE", options);
+          date = date.charAt(0).toUpperCase() + date.substr(1);
+          w.dt_txt = date + " " + hours;
+        }
+      }
     }
   },
   created() {
