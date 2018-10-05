@@ -7,17 +7,21 @@ const Highcharts = require("highcharts");
 export default {
   props: ["weeks", "nrOfTicketsPerWeek", "averageCloseDays"],
   mounted() {
+    const gray = "#9a9a9a";
+    const purple = "";
+    const darkBlue = "#27293d";
+    const yellow = "#FFCC00";
     const supportChart = Highcharts.chart("container", {
       legend: {
         itemStyle: {
-          color: "#9a9a9a"
+          color: gray
           /*  display: "none" */
           /*             fontWeight: 'bold' */
         }
       },
       chart: {
         type: "column",
-        backgroundColor: "#27293d",
+        backgroundColor: darkBlue,
         style: {
           fontFamily: "'Poppy', sans-serif",
           letterSpacing: "1px",
@@ -32,12 +36,12 @@ export default {
       xAxis: {
         title: {
           text: "Vecka",
-          style: { color: "#9a9a9a" }
+          style: { color: gray }
         },
         categories: this.weeks,
         labels: {
           style: {
-            color: "#9a9a9a"
+            color: gray
           }
         }
       },
@@ -45,12 +49,12 @@ export default {
         {
           title: {
             text: "Antal ärenden",
-            style: { color: "#FFF" }
+            style: { color: gray }
           },
           opposite: true,
           labels: {
             style: {
-              color: "#FFF"
+              color: gray
             }
           },
           gridLineColor: "hsla(0, 0%, 100%, 0.1)"
@@ -68,12 +72,12 @@ export default {
           title: {
             text: "Lösningstid",
             style: {
-              color: "#FFF"
+              color: gray
             }
           },
           labels: {
             style: {
-              color: "#FFF"
+              color: gray
             }
           } /* ,
           labels: {
@@ -107,10 +111,10 @@ export default {
               y1: 0,
               y2: 1
             },
-            stops: [[0, "#651778"], [1, "#27293d"]]
+            stops: [[0, "#651778"], [1, darkBlue]]
           },
           borderWidth: "2",
-          legendColor: "#FFF",
+          legendColor: gray,
           boxShadow: "120px 80px 40px 20px #0ff"
         },
 
@@ -130,8 +134,8 @@ export default {
           type: "spline",
           name: "Ärenden",
           data: this.nrOfTicketsPerWeek,
-          color: "#FFCC00",
-          legendColor: "#FFF"
+          color: yellow,
+          legendColor: gray
         }
       ]
     });

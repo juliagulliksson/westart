@@ -67,6 +67,7 @@ export default {
 table {
   width: 100%;
   margin-bottom: 10px;
+  border-collapse: collapse;
 }
 
 .red {
@@ -88,9 +89,10 @@ table {
 } */
 
 table td {
-  padding: 10px 0px 10px 0px;
-  border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
+  padding: 12px 0px 12px 0px;
+  border-top: 1px solid hsla(0, 0%, 100%, 0.1);
   color: hsla(0, 0%, 100%, 0.8);
+  font-size: 0.9em;
 }
 
 table td:not(:last-child) {
@@ -107,7 +109,7 @@ table th {
   font-weight: 700;
   text-transform: uppercase;
   color: hsla(0, 0%, 100%, 0.7);
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 table th:not(:last-child) {

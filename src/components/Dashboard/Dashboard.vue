@@ -15,7 +15,6 @@ import Row1 from "./Row1";
 import SupportTicketsTable from "./SupportTicketsTable";
 import { DiffDays } from "./mixins/DiffDays.js";
 import { GetTickets } from "./mixins/GetTickets.js";
-const moment = require("moment");
 
 export default {
   name: "Dashboard",
@@ -116,23 +115,9 @@ export default {
   created() {
     this.getSupportTickets();
     // Get support tickets every 5 minutes
-    setInterval(() => {
+    /*  setInterval(() => {
       this.getSupportTickets();
-    }, 300000);
-    fetch(
-      "http://api.openweathermap.org/data/2.5/weather?lat=59.752852399999995&lon=18.7025318&appid=38825652b216759d64f897d81526a5fa&units=metric"
-    )
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-        let sunrise = response.sys.sunrise;
-        let sunset = response.sys.sunset;
-        sunset = new Date(sunset * 1000);
-        sunrise = new Date(sunrise * 1000);
-
-        console.log(sunrise);
-        console.log(sunset);
-      });
+    }, 300000); */
   },
   mounted() {
     /* setInterval(() => {
@@ -151,7 +136,7 @@ export default {
 .support-tickets {
   width: 98%;
   margin: 0px auto;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .support-tickets .panel-body {
@@ -192,17 +177,14 @@ div.graph {
   height: 300px;
 }
 
-.panel-heading {
-  border-radius: 0;
-}
-
 body {
   background-color: #05101d;
 }
 
-.panel-info > .panel-heading {
+.panel-heading {
   background-color: #27293d;
   border: 0;
+  border-radius: 0;
 }
 
 .panel-info {
@@ -212,6 +194,7 @@ body {
 .panel {
   background-color: #27293d;
   box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
 .panel-body {
@@ -228,7 +211,7 @@ body {
   color: #fff;
   font-weight: 200;
   margin-top: 10px;
-  padding-left: 25px;
+  padding-left: 33px;
 }
 
 .dashboard-wrapper {
@@ -245,30 +228,62 @@ body {
   height: 100%;
 }
 
-.four-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  height: 40%;
-  /*  flex-basis: 45%; */
-  width: 95%;
-}
-
 .four-wrapper {
   display: flex;
   /*  align-items: center; */
-  justify-content: center;
-  flex-basis: 50%;
-  height: 470px;
+  justify-content: space-around;
+  flex-basis: 49%;
+  flex-wrap: wrap;
 }
 
 div.row1 {
   flex-basis: 46%;
-  height: 100%;
+  /* height: 100%; */
   background-color: #27293d;
 }
 
 .no-margin {
   margin: 0;
+}
+
+.weather-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.weather-wrapper p {
+  font-size: 1.9em;
+  margin: 8px 0px;
+}
+
+.weather-wrapper p.date {
+  font-size: 1em;
+  font-weight: 300;
+}
+
+.weather-flex-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.weather-flex-wrapper .panel-body {
+  flex-grow: 1;
+}
+
+/* .namnsdag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+.namnsdag p {
+  font-size: 2em;
+}
+
+.wi {
+  color: #ffcc00;
+  font-size: 38px;
+  margin: 10px 7px;
 }
 </style>

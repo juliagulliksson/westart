@@ -40,7 +40,6 @@ export default {
             //Combine the 2 arrays
             tickets = tickets.concat(response.issues);
             this.setTicketFunctions(tickets);
-            console.log(tickets);
           });
         } else {
           this.setTicketFunctions(tickets);

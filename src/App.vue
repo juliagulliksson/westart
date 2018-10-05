@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="background">
     <div class="navigation">
       <div class="navigation-menu">
         <router-link to="/">Dashboard</router-link>
@@ -8,10 +9,12 @@
       <div class="logo"><img src="./assets/westartlogo.svg"></div>
     </div>
     <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
+require("./assets/weather-icons.min.css");
 export default {
   name: "App"
 };
@@ -20,9 +23,27 @@ export default {
 <style>
 #app {
   font-family: "Poppins", sans-serif;
+  /*  background-image: url("./assets/Logo.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; */
 }
 body {
   background-color: #f7f9fc;
+}
+
+.background::before {
+  background-image: url("./assets/Logo.svg");
+  background-size: cover;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 5px;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  opacity: 0.4;
+  right: 300px;
 }
 
 .logo {
@@ -53,7 +74,7 @@ body {
 .navigation {
   width: 80%;
   margin: 0px auto;
-  padding: 20px 0px;
+  padding: 14px 0px;
   display: flex;
   justify-content: space-between;
 }
