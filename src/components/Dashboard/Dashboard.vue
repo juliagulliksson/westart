@@ -5,6 +5,7 @@
    <!--  <SupportTicketsTable v-else :supportTickets="supportTicketsPage2"></SupportTicketsTable> -->
        
     <Row1 :mockData="mockData" :nrOfSupportTickets="nrOfSupportTickets"></Row1>
+    <MikeyQuotes></MikeyQuotes>
     
   </div>
 </template>
@@ -15,12 +16,14 @@ import Row1 from "./Row1";
 import SupportTicketsTable from "./SupportTicketsTable";
 import { DiffDays } from "./mixins/DiffDays.js";
 import { GetTickets } from "./mixins/GetTickets.js";
+import MikeyQuotes from "./mikeyquotes/MikeyQuotes";
 
 export default {
   name: "Dashboard",
   components: {
     Row1: Row1,
-    SupportTicketsTable: SupportTicketsTable
+    SupportTicketsTable: SupportTicketsTable,
+    MikeyQuotes: MikeyQuotes
   },
   data() {
     return {
@@ -188,14 +191,11 @@ body {
   border-radius: 0;
 }
 
-.panel-info {
-  border: 1px solid transparent;
-}
-
 .panel {
   background-color: #27293d;
   box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  border: 1px solid transparent;
 }
 
 .panel-body {
@@ -294,5 +294,19 @@ div.row1 {
   color: #fff;
   font-size: 38px;
   margin: 10px 7px;
+}
+
+.quote-wrapper {
+  width: 70%;
+  margin: 30px auto 0px auto;
+}
+
+.quote-wrapper p.quote {
+  font-family: "archiaregular";
+  font-size: 1.7em;
+}
+
+.quote-wrapper p.quote-description {
+  font-size: 1.4em;
 }
 </style>

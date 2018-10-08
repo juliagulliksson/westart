@@ -1,5 +1,5 @@
 <template>
- <div class="row1 panel panel-info weather-flex-wrapper">
+ <div class="row1 panel weather-flex-wrapper">
    <!--  <div class="panel-heading">
         <h3>Vädret</h3>
       </div> -->

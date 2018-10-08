@@ -23,7 +23,7 @@
             <td>
             {{supportTicket.status.name}}
           </td>
-          <td :class="{red: supportTicket.priority.name === 'Omedelbar'}">
+          <td :class="{bold: supportTicket.priority.name === 'Omedelbar'}">
             {{supportTicket.priority.name}}
           </td>
           <td>
@@ -70,23 +70,9 @@ table {
   border-collapse: collapse;
 }
 
-.red {
-  /*  color: rgb(197, 8, 8); */
-  /* color: #ffcc00; */
+.bold {
   font-family: "archiabold";
 }
-
-/* .immediate {
-  background-color: #44486b;
-} */
-
-/* .immediate td {
-  color: #ffcc00;
-} */
-
-/* .immediate td {
-  border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
-} */
 
 table td {
   padding: 12px 0px 12px 0px;

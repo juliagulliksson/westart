@@ -176,6 +176,11 @@ export default {
   font-style: normal;
 }
 
+@font-face {
+  font-family: "noway_regularitalic";
+  src: url("assets/Noway/Noway-Regular-Italic-Webfont/noway_regular_italic-webfont.eot");
+}
+
 #app {
   font-family: "archiaregular";
 }

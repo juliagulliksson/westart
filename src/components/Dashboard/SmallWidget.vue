@@ -1,7 +1,7 @@
 <template>
       
     <!-- <div class="row1 panel panel-info margin"> -->
-      <div class="row1 panel panel-info" :class="{margin: margin}">
+      <div class="row1 panel" :class="{margin: margin}">
       <div class="panel-heading">
           <h3>{{ title }}</h3>
         </div>
