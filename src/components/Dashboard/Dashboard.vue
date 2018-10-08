@@ -171,6 +171,7 @@ div.row1 p {
 .panel-body p {
   color: hsla(0, 0%, 100%, 0.8);
   font-size: 2.6em;
+  font-family: "nowayregular";
 }
 
 div.graph {
@@ -212,6 +213,7 @@ body {
   font-weight: 200;
   margin-top: 10px;
   padding-left: 33px;
+  font-family: "nowaylight";
 }
 
 .dashboard-wrapper {
@@ -255,11 +257,13 @@ div.row1 {
 .weather-wrapper p {
   font-size: 1.9em;
   margin: 8px 0px;
+  font-family: "nowayregular";
 }
 
 .weather-wrapper p.date {
   font-size: 1em;
-  font-weight: 300;
+  /* font-weight: 300; */
+  /* font-family: "nowayregular"; */
 }
 
 .weather-flex-wrapper {
@@ -287,7 +291,7 @@ div.row1 {
 }
 
 .wi {
-  color: #ffcc00;
+  color: #fff;
   font-size: 38px;
   margin: 10px 7px;
 }

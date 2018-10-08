@@ -8,11 +8,12 @@
 const moment = require("moment");
 import WeatherWidget from "./WeatherWidget";
 import Icons from "../../../icons.json";
+import APIkey from "../../../key.json";
 export default {
   data() {
     return {
-      weather: []
-      /*      icons: [] */
+      weather: [],
+      APIKey: APIkey.OWkey
     };
   },
   components: {
@@ -21,7 +22,9 @@ export default {
   methods: {
     fetchWeather() {
       fetch(
-        "http://api.openweathermap.org/data/2.5/forecast?lat=59.752852399999995&lon=18.7025318&appid=38825652b216759d64f897d81526a5fa&units=metric"
+        `http://api.openweathermap.org/data/2.5/forecast?lat=59.752852399999995&lon=18.7025318&appid=${
+          this.APIKey
+        }&units=metric`
       )
         .then(response => response.json())
         .then(response => {
@@ -63,15 +66,15 @@ export default {
     },
     checkIfDateIsToday(date) {
       let today = new Date();
-      return today.toDateString() == date.toDateString();
+      return today.toDateString() === date.toDateString();
     },
     checkIfDateIsTomorrow(date) {
       let tomorrow = this.returnDates(1);
-      return tomorrow == date.toDateString();
+      return tomorrow === date.toDateString();
     },
     checkIfDateIsDayAfterTomorrow(date) {
       let dayAfter = this.returnDates(2);
-      return dayAfter == date.toDateString();
+      return dayAfter === date.toDateString();
     },
     returnDates(dayOffSet) {
       return moment()

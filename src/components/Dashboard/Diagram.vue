@@ -28,22 +28,23 @@ export default {
       let urlParameters = `created_on=%3E%3C${dates.startDate}|${
         dates.endDate
       }&status_id=*&limit=100`;
-      let tickets;
       this.getTickets(urlParameters).then(response => {
-        tickets = response.issues;
+        let tickets = response.issues;
         if (response.issues.length === 100) {
-          urlParameters = `created_on=%3E%3C${dates.startDate}|${
-            dates.endDate
-          }&status_id=*&limit=100&offset=100`;
-          //Get additional tickets
-          this.getTickets(urlParameters).then(response => {
-            //Combine the 2 arrays
-            tickets = tickets.concat(response.issues);
-            this.setTicketFunctions(tickets);
-          });
+          this.getAdditionalTickets(tickets, dates);
         } else {
           this.setTicketFunctions(tickets);
         }
+      });
+    },
+    getAdditionalTickets(tickets, dates) {
+      let urlParameters = `created_on=%3E%3C${dates.startDate}|${
+        dates.endDate
+      }&status_id=*&limit=100&offset=100`;
+      this.getTickets(urlParameters).then(response => {
+        //Combine the 2 arrays
+        tickets = tickets.concat(response.issues);
+        this.setTicketFunctions(tickets);
       });
     },
     setTicketFunctions(tickets) {

@@ -4,7 +4,7 @@ export const GetTickets = {
     getTickets(urlParameters) {
       return fetch(
         `http://redmine.westart.se/issues.json?key=${
-          APIKey.key
+          APIKey.WAkey
         }&${urlParameters}`
       ).then(response => response.json());
     }

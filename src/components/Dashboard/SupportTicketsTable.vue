@@ -73,7 +73,7 @@ table {
 .red {
   /*  color: rgb(197, 8, 8); */
   /* color: #ffcc00; */
-  font-weight: 700;
+  font-family: "archiabold";
 }
 
 /* .immediate {
@@ -106,10 +106,10 @@ table td:not(:first-child) {
 table th {
   padding: 10px 0px 10px 0px;
   color: #fff;
-  font-weight: 700;
   text-transform: uppercase;
   color: hsla(0, 0%, 100%, 0.7);
   font-size: 0.8em;
+  font-family: "archiabold";
 }
 
 table th:not(:last-child) {
